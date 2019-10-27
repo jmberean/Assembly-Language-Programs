@@ -1,0 +1,20 @@
+
+
+start: ldc 10
+       push
+       call sum
+       pop
+       dout
+       halt
+sum:   ldr 1
+       sub one
+       jz rtn
+       push
+       call sum
+rtnRec: 
+       pop
+       addr 1
+       str 1
+rtn:   ret
+one:   dw 1
+       end start

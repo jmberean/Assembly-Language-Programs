@@ -1,0 +1,49 @@
+
+;program illustrating input/output, loops, conditional branching, addresses with indexing
+
+ldc     msg1
+sout
+ldc     msg2
+sout
+ldc     inbuf // loading 81 spots into AC 0 times
+sin
+sout
+ldc     '\n'
+aout
+
+loop:   ldc     inbuf // load string into AC
+add     index; address of next character in string
+ldi	// load indirect AC = m[AC] (AC = inbuf’s ASCII value)
+jz      stop; end of string // checks if string zero
+
+st curr    // store whatevers in the AC into curr[0]
+sub aconst // subtract ASCII value from character within AC
+jn next     ; test if character is a small letter
+
+ld curr
+sub zconst
+sub one
+jzop next   ; if not a small letter, process next character
+ld curr     ; if a small letter, convert to upper case
+add conv
+st  curr
+
+next:   ld curr     ; display output character
+aout
+ld      index; modify loop index
+add     one
+st      index //
+ja      loop  // jump always to loop
+
+stop:    halt
+;data area
+curr:    dw      0
+one:     dw      1
+conv:    dw      -32
+index:   dw      0
+aconst:  dw     'a'
+zconst:  dw     'z'
+inbuf:   dw 81 dup 0 // duplicate 81 zero times
+msg1:    dw "Program to display an input string,\nwith lower case letters converted to upper case\n\n"
+msg2:    dw  "Input a string of up to 80 characters."
+

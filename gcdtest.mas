@@ -1,0 +1,68 @@
+!snew
+
+
+start:   ldc msg0;    Is there a gcd?
+         sout;
+         ain;
+         sub y;
+         jnz progend;
+         ldc '\n';
+         aout;
+         ldc msgn;    input n
+         sout;
+         din;         
+         st n;        store n
+         ldc '\n';
+         aout;
+         ldc msgm;    input m
+         sout;
+         din;
+         st m;        store m
+ 
+         ld m;
+         push;        push m
+         ld n;
+         push;        push n
+         ldc msg1;
+         sout;
+
+         call gcd;
+ret1:    pop;         clear stack
+         pop;
+ 
+         ja start
+
+gcd:      ldr 2;        load m from stack
+          jz exit1;     exit if m = 0
+          subr 1;       compute m - n
+          jz exit1;     exit if m = n
+          ldr 1;        load n from stack
+          push;         push n for this recursive call
+          ldr 3;        load m from stack for this recursive call
+          div_mod;      compute q and r (on stack, next m)
+          ldr 3;
+          push;         push m  as n for next call
+       
+          call gcd;     recursive call
+recrtn:
+          pop;          clear parameters from current call
+
+          pop;
+          ret;          return to previous call
+exit1:    ldr 1;        
+          dout;         display gcd
+          ret;          return to main program
+          
+progend: halt;
+n:       dw 47;
+m:       dw 13;
+msg0:    dw  "\n \n Is there a gcd problem? (y/n) ";
+msg1:    dw  " \n gcd(n,m) = ";
+msg2:    dw  " m (>0) = ";
+msg3:    dw  " quotient = ";
+msg4:    dw  " remainder = ";
+msgn:    dw  "\n enter non-negative integer: n = ";
+msgm:    dw  "\n enter positive integer: m = ";
+y:       dw  'y';
+         end start;
+

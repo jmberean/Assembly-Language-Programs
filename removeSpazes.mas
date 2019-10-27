@@ -1,0 +1,49 @@
+x: dw "ab cd eoj non    ububf"
+y: dw 100 dup 0
+
+spaceCheck: dw 33
+currChar: dw 0
+index1: dw 0
+index2: dw 0
+index3: dw 0
+one: dw 1
+
+
+loop:   ldc x           // ac = x
+add index1      // ac = ac + mem[index1]
+ldi             // ac = mem[ac + mem[index1]]
+jz end
+st currChar
+sub spaceCheck
+jn spaceFound
+jzop noSpace
+jz end
+
+spaceFound: ld index1
+add one
+st index1
+ja loop
+
+noSpace:    ld currChar // ac = mem[currChar]
+aout        // Output ASCII char in ac reg
+push        // mem[--sp] = ac ; Push onto stack
+ldc y       // ac = y
+add index2  // ac = ac + index2
+sti         // mem[ac] = mem[sp++] ; Store indirect
+ld index1   // ac = mem[index1]
+add one     // ac = ac + mem[one]
+st index1   // mem[index1] = ac
+
+ja loop
+
+end: ldc y
+add index3
+ldi
+jz halt
+aout
+ld index3
+add one
+st index3
+ja end
+
+halt: halt

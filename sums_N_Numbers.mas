@@ -1,0 +1,32 @@
+count: dw 0
+msg1: dw "How many integers do you want to add?" ; declare assembly directive msg1
+msg2: dw "Input an integer:    " ; declare assembly directive msg2
+msg3: dw  "Sum =  "
+sum: dw 0
+one: dw 1 ; Initialize ; in the data section, and use
+
+
+ldc msg1 	; 1)	Print a message “How many integers do you want to add?” // load in this string to AC
+sout 		; output string who’s start address is in the AC
+din  		; decimal integer input
+st count	; and the program should store that value at a memory location with symbolic address “count”.
+
+loop:jz next	; This tests whether the value in AC (the value of “count”)
+ldc msg2 	; 3) Display a message (msg2) which directs the user "Input an integer:     "
+sout
+din 		; 4) Input the integer using din.
+add sum
+st sum
+ld count
+sub one
+st count
+ja loop
+
+next: 	ldc msg3
+sout
+ld sum 	; 8) At label “exit”, the program should display a message (msg3) saying “Sum =  "
+dout
+
+halt 		; Then output the final value of sum and halt the program.
+
+s

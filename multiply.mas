@@ -1,0 +1,36 @@
+
+xx:    dw 6
+yy:    dw 7
+
+start: ld yy
+push // push yy onto stack
+ld xx
+push
+call mult
+
+rtn:   pop
+dout
+pop
+halt
+
+mult:  ldc 0
+st prod // store prod which is zero into AC
+ldr 1 // load relative spot 1 in the stack into AC
+jz ans
+
+loop:  ld prod
+addr 2 // ac = ac + mem[bp+s]; cy = carry;
+st prod
+ldr 1
+sub one
+str 1
+jnz loop
+
+ans:   ld prod
+str 1
+ret
+
+one:   dw 1
+prod:  dw 0
+end start
+

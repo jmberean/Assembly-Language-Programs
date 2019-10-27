@@ -1,0 +1,103 @@
+x: dw "abcdefggfedcba"
+msgP: dw " This word is a Palidrome! "
+msg: dw " Would you like to test for another Palindrome word? "
+msgPN: dw " This word is NOT a Palidrome! "
+msg1: dw "Enter a String: "
+s: dw 100 dup 0
+yesOrNo: dw 0
+y: dw 121
+
+index1: dw 0
+index2: dw 0
+one: dw 1
+zero: dw 0
+leftC: dw 0
+rightC: dw 0
+
+ldc msg
+sout
+ldc yesOrNo
+ain
+sub y
+jn end
+jz program
+
+program:    ldc msg1
+sout
+ldc s
+sin
+sout
+ld zero
+st index1
+
+loopStringLength:   ldc s           // ac = x
+add index2      // ac = ac + mem[index1]
+ldi             // ac = mem[ac + mem[index1]]
+jz subOneFromI2
+
+ld index2   // ac = mem[index1]
+add one     // ac = ac + mem[one]
+st index2   // mem[index1] = ac
+
+ja loopStringLength
+
+subOneFromI2:   ld index2   // ac = mem[index1]
+sub one     // ac = ac + mem[one]
+st index2   // mem[index1] = ac
+ja beg
+
+beg:    ldc s
+add index1
+ldi
+jz endProg
+st leftC
+ldc s
+add index2
+ldi
+st rightC
+
+ld leftC
+sub rightC
+
+jz next
+jnz endNoPal
+
+next:   ld index1   // ac = mem[index1]
+add one     // ac = ac + mem[one]
+st index1   // mem[index1] = ac
+ld index2   // ac = mem[index1]
+sub one      // ac = ac + mem[one]
+st index2   // mem[index1] = ac
+
+ld index2
+sub index1
+
+jn endPal ; at the very end IF R < L its a palidrome
+ja beg
+
+endProg:    ld index2
+sub index1
+jn endPal ; at the very end IF R < L its a palidrome
+jzop endNoPal ; else R >= L no palidrome
+
+endNoPal:   ldc msgPN
+sout
+ldc msg
+sout
+ldc yesOrNo
+ain
+sub y
+jn end
+jz program
+
+endPal: ldc msgP
+sout
+ldc msg
+sout
+ldc yesOrNo
+ain
+sub y
+jn end
+jz program
+
+end: halt

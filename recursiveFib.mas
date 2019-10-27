@@ -1,0 +1,67 @@
+
+main: ldc 0
+push
+push
+push
+ld n
+push
+call fib
+rtnm: pop
+pop
+pop
+pop
+dout
+halt
+n:    dw  11
+fib:  ldc 1    ;test if n = 1
+subr 1
+jnz  test2
+ldc 1
+str 4    ; f(1) = 1
+ret
+test2: ldc 2   ; test if n = 2
+subr 1
+jnz  nge3
+ldc 1
+str 4    ; f(2) = 1
+ret
+nge3:          ; prepare first recursive call
+ldc 0
+push
+push
+push
+ldr 4
+sub c1
+push      ; push n-1
+call fib
+rtn1: pop
+pop
+pop
+ldr 3; test a
+jnz store_b
+pop
+str 2      ; a  = f(n-1)
+ja nextcall
+store_b:
+pop
+str 3      ; b = f(n-2)
+sum:  ldr 2
+addr 3
+str 4      ; f(n) = f(n-1) + f(n-2)
+ret
+nextcall:  ldc 0   ; prepare second recursive call
+push
+push
+push
+ldr 4
+sub c2
+push      ; push n-2
+call fib
+rtn2: ja rtn1
+c1:   dw 1
+c2:   dw 2
+a:    dw 0
+b:    dw 0
+c:    dw 0
+end main
+
